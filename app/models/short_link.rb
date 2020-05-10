@@ -1,4 +1,5 @@
 class ShortLink < ApplicationRecord
-  validates_presence_of :token
-  validates :token, length: { is: 5 }
+  validates :token, presence: true, 
+                    length: { is: 5 }, 
+                    format: { with: /[a-zA-Z0-9]{5}/ }
 end
