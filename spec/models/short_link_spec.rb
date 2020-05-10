@@ -54,4 +54,12 @@ RSpec.describe ShortLink, type: :model do
       expect(short_link.save).to be true
     end
   end
+
+  context 'clicks_count' do
+    it 'should have default value of 0' do
+      short_link = ShortLink.new(token: random_token, long_url: random_url)
+
+      expect(short_link.clicks_count).to eql(0)
+    end
+  end
 end
