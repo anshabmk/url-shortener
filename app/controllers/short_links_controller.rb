@@ -12,4 +12,15 @@ class ShortLinksController < ApplicationController
       end
     end
   end
+
+  def show
+    @short_link = ShortLink.find_by_token(params[:token])
+
+    if @short_link
+      @short_link.increment!(:clicks_count)
+      redirect_to @short_link.long_url, status: :moved_permanently
+    else
+      render plain: 'Not found.', status: :not_found
+    end
+  end
 end
