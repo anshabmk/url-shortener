@@ -25,5 +25,30 @@ RSpec.describe ShortLink, type: :model do
 
       expect(short_link.save).to be false
     end
+
+    it 'should not save if token is not unique' do
+      token = Faker::Alphanumeric.alphanumeric(number: 5)
+
+      short_link1 = ShortLink.create!(
+        long_url: Faker::Internet.url,
+        token: token
+      )
+
+      short_link2 = ShortLink.new(
+        long_url: Faker::Internet.url,
+        token: token
+      )
+
+      expect(short_link2.save).to be false
+    end
+
+    it 'should save if valid token is given' do
+      short_link = ShortLink.new(
+        long_url: Faker::Internet.url,
+        token: Faker::Alphanumeric.alphanumeric(number: 5)
+      )
+
+      expect(short_link.save).to be true
+    end
   end
 end
