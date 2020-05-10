@@ -1,0 +1,5 @@
+var shortLinkParagraph = document.querySelector("#short-link");
+shortLinkParagraph.innerHTML = "<%= @short_link.token.inspect %>"
+
+var shortLinkForm = document.querySelector("#short-link-form");
+shortLinkForm.reset();
