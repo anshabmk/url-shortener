@@ -1,5 +1,5 @@
 var shortLinkParagraph = document.querySelector("#short-link");
-shortLinkParagraph.innerHTML = "<%= @short_link.token.inspect %>"
+shortLinkParagraph.innerHTML = '<%= "http://localhost:3000/#{@short_link.token}" %>'
 
 var shortLinkForm = document.querySelector("#short-link-form");
 shortLinkForm.reset();
