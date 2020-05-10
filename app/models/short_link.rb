@@ -5,4 +5,12 @@ class ShortLink < ApplicationRecord
                     format: { with: /[a-zA-Z0-9]{5}/ }
   
   validates :long_url, presence: true
+
+  before_validation :set_token
+
+  private
+
+    def set_token
+      self.token = Faker::Alphanumeric.alphanumeric(number: 5)
+    end
 end
