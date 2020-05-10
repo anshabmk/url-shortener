@@ -40,4 +40,18 @@ RSpec.describe ShortLink, type: :model do
       expect(short_link.save).to be true
     end
   end
+
+  context 'long_url' do
+    it 'should not save if long_url is not present' do
+      short_link = ShortLink.new(token: random_token)
+
+      expect(short_link.save).to be false
+    end
+
+    it 'should save if valid long_url is given' do
+      short_link = ShortLink.new(token: random_token, long_url: random_url)
+
+      expect(short_link.save).to be true
+    end
+  end
 end
