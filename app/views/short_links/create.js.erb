@@ -1,5 +1,12 @@
+var errorExplanation = document.querySelector('#error-explanation');
 var shortLinkParagraph = document.querySelector("#short-link");
-shortLinkParagraph.innerHTML = '<%= "http://localhost:3000/#{@short_link.token}" %>'
 
-var shortLinkForm = document.querySelector("#short-link-form");
-shortLinkForm.reset();
+<% if @short_link.errors.any? %>
+  shortLinkParagraph.innerHTML = '';
+  errorExplanation.innerHTML = '<%= escape_javascript(render 'shared/validation_messages', object: @short_link) %>';
+<% else %>
+  errorExplanation.innerHTML = '';
+  shortLinkParagraph.innerHTML = '<%= "http://localhost:3000/#{@short_link.token}" %>';
+  var shortLinkForm = document.querySelector("#short-link-form");
+  shortLinkForm.reset();
+<% end %>
