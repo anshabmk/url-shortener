@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe "ShortLinks", type: :request do
   let(:random_url) { Faker::Internet.url }
-  let(:random_token) { Faker::Alphanumeric.alphanumeric(number: 5) }
 
   it 'creates a short link' do
     get '/short_links/new'
@@ -12,7 +11,7 @@ RSpec.describe "ShortLinks", type: :request do
     expect(response).to render_template(:create)
   end
 
-  it 'redirects to the long url with status code 301' do
+  it 'redirects to the long_url with status 301' do
     short_link = ShortLink.create(long_url: random_url)
 
     get "/#{short_link.token}"
@@ -20,8 +19,14 @@ RSpec.describe "ShortLinks", type: :request do
     expect(response.code).to eql('301')
   end
 
+  it 'increments the clicks_count by 1' do
+    short_link = ShortLink.create(long_url: random_url)
+
+    expect { get "/#{short_link.token}" }.to change { short_link.reload.clicks_count }.by 1
+  end
+
   it 'renders 404 not found for a non-existing token' do
-    get "/#{random_token}"
+    get "/#{Faker::Alphanumeric.alphanumeric(number: 5)}"
     expect(response.body).to eql('Not found.')
     expect(response.code).to eql('404')
   end
