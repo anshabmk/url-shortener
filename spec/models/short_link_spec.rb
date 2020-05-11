@@ -59,4 +59,11 @@ RSpec.describe ShortLink, type: :model do
       expect(subject.token).to eql(current_token)
     end
   end
+
+  describe 'Default values' do
+    it 'should have default value of 0 for clicks_count' do
+      expect(subject.save).to be true
+      expect(subject.clicks_count).to eql(0)
+    end
+  end
 end
