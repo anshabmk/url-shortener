@@ -58,6 +58,11 @@ RSpec.describe ShortLink, type: :model do
       subject.update(long_url: random_url)
       expect(subject.token).to eql(current_token)
     end
+
+    it 'should set expiry_at after create to be 30 days from created_at' do
+      expect(subject.save).to be true
+      expect(subject.expiry_at).to eql(subject.created_at + 30.days)
+    end
   end
 
   describe 'Default values' do
