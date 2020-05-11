@@ -1,5 +1,7 @@
 <h1>Create new short URL</h1>
 
+<div id="error-explanation"></div>
+
 <%= form_with id: 'short-link-form', model: ShortLink.new do |form| %>
   <%= form.label :long_url %>
   <%= form.text_field :long_url, required: true %>
