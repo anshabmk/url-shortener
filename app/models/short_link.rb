@@ -7,7 +7,7 @@ class ShortLink < ApplicationRecord
   validates :long_url, presence: true
 
   before_validation :set_token, on: :create
-  after_create :set_expiry_at
+  before_create :set_expiry_at
 
   private
 
