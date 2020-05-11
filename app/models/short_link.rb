@@ -11,6 +11,8 @@ class ShortLink < ApplicationRecord
   private
 
     def set_token
-      self.token = Faker::Alphanumeric.alphanumeric(number: 5)
+      self.token = SecureRandom.alphanumeric(5)
+
+      set_token if ShortLink.where(token: self.token).exists?
     end
 end
