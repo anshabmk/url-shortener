@@ -6,7 +6,7 @@ class ShortLink < ApplicationRecord
   
   validates :long_url, presence: true
 
-  before_validation :set_token
+  before_validation :set_token, on: :create
 
   private
 
