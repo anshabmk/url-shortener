@@ -2,64 +2,61 @@ require 'rails_helper'
 
 RSpec.describe ShortLink, type: :model do
   let(:random_url) { Faker::Internet.url }
-  let(:random_token) { Faker::Alphanumeric.alphanumeric(number: 5) }
 
-  context 'token' do
-    it 'should not save without a token' do
-      short_link = ShortLink.new(long_url: random_url)
-  
-      expect(short_link.save).to be false
+  subject { described_class.new(long_url: random_url) }
+
+  describe 'Validations' do
+    it 'is valid with valid attributes' do
+      expect(subject).to be_valid
     end
 
-    it 'should not save if the length of the token is not 5' do
-      short_link = ShortLink.new(
-        long_url: random_url,
-        token: Faker::Alphanumeric.alphanumeric(number: Random.rand(6..10))
-      )
-
-      expect(short_link.save).to be false
+    it 'is not valid without long url' do
+      subject.long_url = nil
+      expect(subject).to_not be_valid
     end
 
-    it 'should not contain anything other than alphanumeric as token' do
-      short_link = ShortLink.new(long_url: random_url, token: 'abc1@')
-
-      expect(short_link.save).to be false
+    it 'is not valid without token' do
+      expect(subject.save).to be true
+      subject.token = nil
+      expect(subject).to_not be_valid
     end
 
-    it 'should not save if token is not unique' do
-      token = random_token
-      short_link1 = ShortLink.create!(long_url: random_url, token: token)
-      short_link2 = ShortLink.new(long_url: random_url, token: token)
-
-      expect(short_link2.save).to be false
+    it 'is not valid if the length of the token is not 5' do
+      expect(subject.save).to be true
+      invalid_length = [1, 2, 3, 4, 6, 7].sample
+      subject.token = Faker::Alphanumeric.alphanumeric(number: invalid_length)
+      expect(subject).to_not be_valid
     end
 
-    it 'should save if valid token is given' do
-      short_link = ShortLink.new(long_url: random_url, token: random_token)
-
-      expect(short_link.save).to be true
-    end
-  end
-
-  context 'long_url' do
-    it 'should not save if long_url is not present' do
-      short_link = ShortLink.new(token: random_token)
-
-      expect(short_link.save).to be false
+    it 'is not valid if token is not alphanumeric' do
+      expect(subject.save).to be true
+      subject.token = 'ab12@'
+      expect(subject).to_not be_valid
     end
 
-    it 'should save if valid long_url is given' do
-      short_link = ShortLink.new(token: random_token, long_url: random_url)
+    it 'is not valid if token is not unique' do
+      expect(subject.save).to be true
 
-      expect(short_link.save).to be true
+      another_subject = described_class.new(long_url: random_url)
+      expect(another_subject.save).to be true
+
+      another_subject.token = subject.token
+      expect(another_subject).to_not be_valid
     end
   end
 
-  context 'clicks_count' do
-    it 'should have default value of 0' do
-      short_link = ShortLink.new(token: random_token, long_url: random_url)
+  describe 'Callbacks' do
+    it 'should set a token before validation on create' do
+      expect(subject.token).to be_nil
+      expect(subject).to be_valid
+      expect(subject.token).to_not be_nil
+    end
 
-      expect(short_link.clicks_count).to eql(0)
+    it 'should not reset the token before validation on update' do
+      expect(subject.save).to be true
+      current_token = subject.token
+      subject.update(long_url: random_url)
+      expect(subject.token).to eql(current_token)
     end
   end
 end
