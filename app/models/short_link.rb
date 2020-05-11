@@ -7,6 +7,7 @@ class ShortLink < ApplicationRecord
   validates :long_url, presence: true
 
   before_validation :set_token, on: :create
+  after_create :set_expiry_at
 
   private
 
@@ -14,5 +15,9 @@ class ShortLink < ApplicationRecord
       self.token = SecureRandom.alphanumeric(5)
 
       set_token if ShortLink.where(token: self.token).exists?
+    end
+
+    def set_expiry_at
+      self.expiry_at = self.created_at + 30.days
     end
 end
