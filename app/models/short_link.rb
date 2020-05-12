@@ -1,4 +1,6 @@
 class ShortLink < ApplicationRecord
+  has_many :visits
+
   validates :token, presence: true,
                     uniqueness: true,
                     length: { is: 5 },
