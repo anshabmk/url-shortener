@@ -10,8 +10,9 @@ class ShortLinksController < ApplicationController
   def show
     @short_link = ShortLink.find_by_token(params[:token])
 
-    if @short_link
+    if @short_link and @short_link.expiry_at.future?
       @short_link.increment!(:clicks_count)
+
       redirect_to @short_link.long_url, status: :moved_permanently
     else
       render plain: 'Not found.', status: :not_found
