@@ -11,6 +11,7 @@ class ShortLinksController < ApplicationController
     @short_link = ShortLink.find_by_token(params[:token])
 
     if @short_link and @short_link.expiry_at.future?
+      @short_link.visits.create(ip_address: request.remote_ip)
       @short_link.increment!(:clicks_count)
 
       redirect_to @short_link.long_url, status: :moved_permanently
