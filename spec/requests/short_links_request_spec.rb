@@ -30,4 +30,13 @@ RSpec.describe "ShortLinks", type: :request do
     expect(response.body).to eql('Not found.')
     expect(response.code).to eql('404')
   end
+
+  it 'renders 404 not found if the short link has expired' do
+    short_link = ShortLink.create(long_url: random_url)
+    short_link.update(expiry_at: Time.now)
+
+    get "/#{short_link.token}"
+    expect(response.body).to eql('Not found.')
+    expect(response.code).to eql('404')
+  end
 end
