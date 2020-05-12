@@ -26,12 +26,6 @@ RSpec.describe "ShortLinks", type: :request do
     expect(short_link.visits.last.ip_address).to_not be nil
   end
 
-  it 'increments the clicks_count by 1' do
-    short_link = ShortLink.create(long_url: random_url)
-
-    expect { get "/#{short_link.token}" }.to change { short_link.reload.clicks_count }.by 1
-  end
-
   it 'renders 404 not found for a non-existing token' do
     get "/#{Faker::Alphanumeric.alphanumeric(number: 5)}"
     expect(response.body).to eql('Not found.')
