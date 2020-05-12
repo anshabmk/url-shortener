@@ -71,4 +71,8 @@ RSpec.describe ShortLink, type: :model do
       expect(subject.clicks_count).to eql(0)
     end
   end
+
+  describe 'associations' do
+    it { should have_many(:visits) }
+  end
 end
