@@ -19,6 +19,13 @@ RSpec.describe "ShortLinks", type: :request do
     expect(response.code).to eql('301')
   end
 
+  it 'creates a visit record with request remote ip' do
+    short_link = ShortLink.create(long_url: random_url)
+
+    expect { get "/#{short_link.token}" }.to change { short_link.visits.count }.by 1
+    expect(short_link.visits.last.ip_address).to_not be nil
+  end
+
   it 'increments the clicks_count by 1' do
     short_link = ShortLink.create(long_url: random_url)
 
