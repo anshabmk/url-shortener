@@ -37,6 +37,8 @@ group :development, :test do
   gem 'rails-controller-testing'
   # RSpec for testing
   gem 'rspec-rails', '~> 4.0.0'
+  # Shoulda matchers
+  gem 'shoulda-matchers'
 end
 
 group :development do
