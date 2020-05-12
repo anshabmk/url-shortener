@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_12_161721) do
+ActiveRecord::Schema.define(version: 2020_05_12_170434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,7 +18,6 @@ ActiveRecord::Schema.define(version: 2020_05_12_161721) do
   create_table "short_links", force: :cascade do |t|
     t.string "token"
     t.text "long_url"
-    t.integer "clicks_count", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "expiry_at", null: false
