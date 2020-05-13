@@ -1,11 +1,12 @@
-<h1>Create new short URL</h1>
+<h2>Welcome to ShortLink!</h2>
 
 <div id="error-explanation"></div>
 
+<h5>Please enter your URL here</h5>
+
 <%= form_with id: 'short-link-form', model: ShortLink.new do |form| %>
-  <%= form.label :long_url %>
   <%= form.text_field :long_url, required: true %>
-  <%= form.submit %>
+  <%= form.submit 'SHORTEN' %>
 <% end %>
 
-<p id="short-link"></p>
+<div id="short-link"></div>
