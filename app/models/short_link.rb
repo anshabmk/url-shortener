@@ -11,8 +11,13 @@ class ShortLink < ApplicationRecord
   before_validation :set_token, on: :create
   before_create :set_expiry_at
 
-  def top_countries
-    top_countries_with_count(3).keys.join(', ')
+  def top_countries_with_count(limit)
+    visits.select(:country)
+          .where.not(country: nil)
+          .group(:country)
+          .order(count: :desc)
+          .limit(limit)
+          .count
   end
 
   private
@@ -25,14 +30,5 @@ class ShortLink < ApplicationRecord
 
     def set_expiry_at
       self.expiry_at = self.created_at + 30.days
-    end
-
-    def top_countries_with_count(limit)
-      visits.select(:country)
-            .where.not(country: nil)
-            .group(:country)
-            .order(count: :desc)
-            .limit(limit)
-            .count
     end
 end
