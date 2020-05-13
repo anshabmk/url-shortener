@@ -1,2 +1,10 @@
-<h1>Stats#index</h1>
-<p>Find me in app/views/stats/index.html.erb</p>
+<h2>Analytics</h2>
+
+<% @short_links.each do |short_link| %>
+  <p><strong><%= short_link.long_url %></strong></p>
+  <p><%= short_link.token %></p>
+  <br>
+  <p>Total clicks: <%= short_link.visits.count %></p>
+  <p>Top countries: <%= short_link.top_countries %></p>
+  <hr>
+<% end %>
