@@ -2,7 +2,7 @@
 
 <% @short_links.each do |short_link| %>
   <p><strong><%= short_link.long_url %></strong></p>
-  <p><%= short_link.token %></p>
+  <p><%= "#{request.protocol}#{request.host_with_port}/#{short_link.token}" %></p>
   <br>
   <p>Total clicks: <%= short_link.visits_count %></p>
   <p>Top countries: <%= top_countries(short_link) %></p>
