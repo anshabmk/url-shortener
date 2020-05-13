@@ -5,6 +5,6 @@
   <p><%= short_link.token %></p>
   <br>
   <p>Total clicks: <%= short_link.visits_count %></p>
-  <p>Top countries: <%= short_link.top_countries %></p>
+  <p>Top countries: <%= top_countries(short_link) %></p>
   <hr>
 <% end %>
