@@ -1,10 +1,12 @@
 class ShortLink < ApplicationRecord
+  TOKEN_LENGTH = 5
+
   has_many :visits
 
   validates :token, presence: true,
                     uniqueness: true,
-                    length: { is: 5 },
-                    format: { with: /[a-zA-Z0-9]{5}/ }
+                    length: { is: TOKEN_LENGTH },
+                    format: { with: Regexp.new("[a-zA-Z0-9]{#{TOKEN_LENGTH}}") }
   
   validates :long_url, presence: true
 
@@ -23,7 +25,7 @@ class ShortLink < ApplicationRecord
   private
 
     def set_token
-      self.token = SecureRandom.alphanumeric(5)
+      self.token = SecureRandom.alphanumeric(TOKEN_LENGTH)
 
       set_token if ShortLink.where(token: self.token).exists?
     end
