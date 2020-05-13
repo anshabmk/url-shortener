@@ -69,7 +69,7 @@ RSpec.describe ShortLink, type: :model do
     it { should have_many(:visits) }
   end
 
-  describe '#top_countries' do
+  describe '#top_countries_with_count(limit)' do
     def create_visit(country = nil)
       ip_v6_address = Faker::Internet.ip_v6_address
       subject.visits.create(ip_address: ip_v6_address, country: country)
@@ -78,23 +78,21 @@ RSpec.describe ShortLink, type: :model do
     let(:countries) { 4.times.map { Faker::Address.country } }
     before(:each) { subject.save }
 
-    it 'should return top 3 countries as a comma-seperated string' do
+    it 'should return top 3 countries with count' do
       countries.each_with_index do |c, i|
         (i + 1).times { create_visit(c) }
       end
 
-      expectation = countries.reverse[0..2].join(', ')
-      
-      expect(subject).to receive(:top_countries_with_count)
-                     .with(3)
-                     .and_call_original
+      result = subject.top_countries_with_count(3)
 
-      expect(subject.top_countries).to eql(expectation)
+      expect(result[countries[3]]).to eql(4)
+      expect(result[countries[2]]).to eql(3)
+      expect(result[countries[1]]).to eql(2)
     end
 
-    it 'should return an empty string when there are no country data' do
+    it 'should return an empty hash when there are no country data' do
       5.times { create_visit }
-      expect(subject.top_countries).to be_empty
+      expect(subject.top_countries_with_count(3)).to be_empty
     end
   end
 end
