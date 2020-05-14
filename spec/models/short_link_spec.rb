@@ -75,7 +75,7 @@ RSpec.describe ShortLink, type: :model do
       subject.visits.create(ip_address: ip_v6_address, country: country)
     end
 
-    let(:countries) { 4.times.map { Faker::Address.country } }
+    let(:countries) { %w[India Pakistan Bangladesh Srilanka] }
     before(:each) { subject.save }
 
     it 'should return top 3 countries with count' do
