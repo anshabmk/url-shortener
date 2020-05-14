@@ -8,3 +8,12 @@
   <p>Top countries: <%= top_countries(short_link) %></p>
   <hr>
 <% end %>
+
+<center>
+  Showing <%= "#{@offset + 1}-#{@offset + @per_page}" %> of <%= @total_count %> records.
+</center>
+<br>
+<center>
+  <%= link_to_if(previous_page, '< prev', stats_path(page: previous_page)) %> |
+  <%= link_to_if(next_page, 'next >', stats_path(page: next_page)) %>
+</center>
